@@ -4,7 +4,8 @@
 
 ## 当前阶段
 阶段 2。Colab 环境跑通：数据已下载（4.31GB）、import src OK、config 识别 colab。
-**待办**：探明里层数据结构（`/content/data/iam/data/` 套娃，真实 forms/lines/words 在里面）→ 据此写 `src/data.py`。
+**待办**：探明里层数据结构 → 据此写 `src/data.py`。
+**⚠️ 重要发现**：`/content/data/iam/data/` 下是 659 个编号文件夹（000~671，疑似按 writer 分，IAM 有 657 writer），**第一次探查没找到任何 .txt 标注文件**！没标签就无法监督训练。已升级探查 cell 排查标签是否为 csv/json/xml 或藏更深——结果待确认。
 **已知坑**：Colab clone 残留旧文件夹会拉错分支 → 已在 Cell 1 加 `rm -rf` + 分支打印修复。
 **数据持久化**：已改成 Google Drive 版——zip 缓存到 `MyDrive/iam-handwritten-forms/`，每次会话从 Drive 解压到本地 `/content/data/iam`（只下载一次；IAM 海量小图不直接存 Drive）。
 
