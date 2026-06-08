@@ -6,10 +6,10 @@
 阶段 1→2 过渡。**CRNN+CTC 主线原理已全通**（任务/数据/CTC），**工作流已定**（本地写 src + Kaggle 跑，GitHub 同步，见 [workflow](workflow.md)）。下一步：搭好 Kaggle 环境 + fork 一个高分 notebook 跑通。
 
 ## 工作流 & 环境（已定）
-- 本地写 `src/*.py`（git）→ push → Kaggle notebook `git clone` 后 import。
-- 数据不下载本地，用 Kaggle "Add Data" 挂载。路径由 `src/config.py` 自动适配。
+- 本地写 `src/*.py`（git，**commit/push 由用户手动**）→ push → Colab `git clone` 后 import。
+- **跑在 Colab**；数据用 Kaggle API 下载到 `/content/data/iam`。路径由 `src/config.py` 自动适配。
 - 仓库：https://github.com/SleepyEveryD/Kaggle-Study-（branch main）。
-- 待办：注册/验证 Kaggle、fork notebook、回填挂载路径到 config + resources。
+- 待办：拿 kaggle.json、push 脚手架、Colab 跑通下载、回填真实目录到 config + resources。
 
 ## 最近进展（2026-06-08）
 - 搭好笔记/记忆体系（项目 `notes/` 为知识库本体）。

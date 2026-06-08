@@ -1,9 +1,9 @@
 # 工作流：本地写代码 + 云端跑
 
 ## 决定
-- **写代码**：本地（VS Code），放 `src/*.py`，用 git 管理。
-- **跑**：云端 GPU。第一阶段用 **Kaggle**（数据原生、零下载、高分 notebook 就在那），之后自己建模可选 Colab。
-- **同步桥**：GitHub。本地 push → 云端 notebook `git clone`/`pull` → import 运行。
+- **写代码**：本地（VS Code），放 `src/*.py`，用 git 管理。**commit/push 永远由用户手动做。**
+- **跑**：**Colab**（免费 GPU）。数据用 Kaggle API 下载到 Colab。学习/参考的高分 notebook 仍来自 Kaggle 数据集页面（读思路）。
+- **同步桥**：GitHub。本地 push → Colab `git clone`/`pull` → import 运行。
 
 ## 仓库结构
 ```
@@ -18,22 +18,35 @@ IAM-Handwritten-Forms-Dataset/
 ```
 
 ## 数据放哪（不下载到本地！）
-- **Kaggle**：notebook 里点 "Add Data" 搜 iam-handwritten-forms → 自动挂载到 `/kaggle/input/<dataset-slug>/`。
-- **Colab**：用 kaggle API + `kaggle.json` token 下载到 `/content/data/`（每次会话重来）。
-- **本地**：一般不放全量数据；如需小样本调试再放 `data/`（已被 .gitignore 忽略）。
-- 路径由 `src/config.py` 的 `DATA_DIR` 自动选择。⚠️ Kaggle 的确切挂载路径要在 Add Data 后看一眼再确认填回 config。
+Colab 用 **Kaggle API** 把数据集拉进 `/content/data/`（每次新会话要重跑；想免重下可挂 Google Drive 缓存）。
+- 拿 token：Kaggle → Account → "Create New API Token" 下载 `kaggle.json`。
+- 路径由 `src/config.py` 的 `DATA_DIR` 自动选择（colab → `/content/data/iam`）。
+- ⚠️ 解压后看一眼真实子目录结构，回填 config / resources。
 
-## 在 Kaggle notebook 里用本地代码（典型开头 cell）
+## Colab notebook 典型开头 cells
 ```python
-# 1. 打开 notebook 的 Internet 开关（Settings → Internet on）
+# Cell 1: 拉本地代码
 !git clone https://github.com/SleepyEveryD/Kaggle-Study-.git
-import sys; sys.path.append('/kaggle/working/Kaggle-Study-/IAM-Handwritten-Forms-Dataset')
-from src import config, ...    # 调用本地写好的函数
-# 改了本地代码后：!cd Kaggle-Study- && git pull
+import sys; sys.path.append('/content/Kaggle-Study-/IAM-Handwritten-Forms-Dataset')
+# 改了本地代码后：!cd /content/Kaggle-Study- && git pull
+
+# Cell 2: 配 Kaggle API（把 kaggle.json 传上来，或用 Colab Secrets）
+from google.colab import files; files.upload()          # 选 kaggle.json
+!mkdir -p ~/.kaggle && cp kaggle.json ~/.kaggle/ && chmod 600 ~/.kaggle/kaggle.json
+!pip -q install kaggle
+
+# Cell 3: 下载并解压数据
+!kaggle datasets download -d naderabdelghany/iam-handwritten-forms-dataset -p /content/data/iam --unzip
+
+# Cell 4: 用本地写好的代码
+from src import config            # config.ENV == 'colab', config.DATA_DIR 已就绪
+print(config.ENV, config.DATA_DIR)
 ```
+> GPU：Colab 菜单 Runtime → Change runtime type → T4 GPU。
 
 ## 首次行动 checklist
-1. [ ] 注册/登录 Kaggle 账号，手机验证（解锁 GPU + Internet）。
-2. [ ] 确认本地仓库已连到 GitHub 远程（`git remote -v`），能 push。
-3. [ ] 打开数据集页面，挑 1 个 CRNN+CTC 高分 notebook，"Copy & Edit" fork 来跑通一次（先整体感受）。
-4. [ ] 记下挂载路径与 notebook 链接，回填 `notes/resources.md` 和 `src/config.py`。
+1. [ ] Kaggle Account → Create New API Token，拿到 `kaggle.json`。
+2. [ ] 本地把脚手架 commit + push 到 GitHub（用户手动）。
+3. [ ] 新建 Colab notebook，跑上面 4 个 cell，确认数据下载成功、能 import src。
+4. [ ] 解压后 `ls` 看真实目录，回填 `src/config.py` 与 `notes/resources.md`。
+5. [ ] 去 Kaggle 数据集页面挑 1 个 CRNN+CTC 高分 notebook 读思路（参考，不一定在那跑）。
