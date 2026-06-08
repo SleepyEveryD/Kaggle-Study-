@@ -3,7 +3,9 @@
 > 这是项目的**活页状态**，每次学习推进后更新。背景见 [README](../README.md)。
 
 ## 当前阶段
-阶段 1→2 过渡。**CRNN+CTC 主线原理已全通**（任务/数据/CTC），**工作流已定**（本地写 src + Kaggle 跑，GitHub 同步，见 [workflow](workflow.md)）。下一步：搭好 Kaggle 环境 + fork 一个高分 notebook 跑通。
+阶段 2。Colab 环境跑通：数据已下载（4.31GB）、import src OK、config 识别 colab。
+**待办**：探明里层数据结构（`/content/data/iam/data/` 套娃，真实 forms/lines/words 在里面）→ 据此写 `src/data.py`。
+**已知坑**：Colab clone 残留旧文件夹会拉错分支 → 已在 Cell 1 加 `rm -rf` + 分支打印修复。
 
 ## 工作流 & 环境（已定）
 - 本地写 `src/*.py`（git，**commit/push 由用户手动**）→ push → Colab `git clone` 后 import。
