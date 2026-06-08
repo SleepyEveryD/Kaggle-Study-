@@ -43,8 +43,15 @@ os.environ['KAGGLE_KEY']      = userdata.get('KAGGLE_KEY')
 # os.environ['KAGGLE_USERNAME'] = '你的用户名'
 # os.environ['KAGGLE_KEY']      = '你复制的key'
 
-# Cell 3: 下载并解压数据
-!kaggle datasets download -d naderabdelghany/iam-handwritten-forms-dataset -p /content/data/iam --unzip
+# Cell 3: 下载并解压数据（已存在则跳过，避免重下 4.3GB）
+import os, subprocess
+DATA_DIR = '/content/data/iam'
+if os.path.isdir(f'{DATA_DIR}/data') and os.listdir(f'{DATA_DIR}/data'):
+    print('✅ 已存在，跳过下载')
+else:
+    subprocess.run(f'kaggle datasets download -d naderabdelghany/iam-handwritten-forms-dataset -p {DATA_DIR} --unzip', shell=True, check=True)
+!ls {DATA_DIR}
+# 注：删除/新建 runtime 会清空 /content，下次仍需重下；跨会话持久化需挂 Google Drive。
 
 # Cell 4: 用本地写好的代码
 from src import config            # config.ENV == 'colab', config.DATA_DIR 已就绪
