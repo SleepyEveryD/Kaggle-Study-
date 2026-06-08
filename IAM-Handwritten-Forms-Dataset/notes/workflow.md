@@ -43,15 +43,22 @@ os.environ['KAGGLE_KEY']      = userdata.get('KAGGLE_KEY')
 # os.environ['KAGGLE_USERNAME'] = '你的用户名'
 # os.environ['KAGGLE_KEY']      = '你复制的key'
 
-# Cell 3: 下载并解压数据（已存在则跳过，避免重下 4.3GB）
-import os, subprocess
-DATA_DIR = '/content/data/iam'
-if os.path.isdir(f'{DATA_DIR}/data') and os.listdir(f'{DATA_DIR}/data'):
-    print('✅ 已存在，跳过下载')
-else:
-    subprocess.run(f'kaggle datasets download -d naderabdelghany/iam-handwritten-forms-dataset -p {DATA_DIR} --unzip', shell=True, check=True)
-!ls {DATA_DIR}
-# 注：删除/新建 runtime 会清空 /content，下次仍需重下；跨会话持久化需挂 Google Drive。
+# Cell 3: 下载数据（Google Drive 持久化）
+# 策略：只从 Kaggle 下一次→zip 缓存到 Drive；每次会话从 Drive 解压到本地 /content。
+# （IAM 海量小图，别直接存/读 Drive，会极慢；Drive 只存单个 zip，训练读本地。）
+import os, subprocess, shutil
+from google.colab import drive
+drive.mount('/content/drive')
+DRIVE_DIR, ZIP_NAME = '/content/drive/MyDrive/iam-handwritten-forms', 'iam-handwritten-forms-dataset.zip'
+DRIVE_ZIP, LOCAL_DIR = os.path.join(DRIVE_DIR, ZIP_NAME), '/content/data/iam'
+os.makedirs(DRIVE_DIR, exist_ok=True)
+if not os.path.exists(DRIVE_ZIP):                          # 1) Drive 无缓存→Kaggle 下一次
+    subprocess.run('kaggle datasets download -d naderabdelghany/iam-handwritten-forms-dataset -p /content/tmp', shell=True, check=True)
+    shutil.move(f'/content/tmp/{ZIP_NAME}', DRIVE_ZIP)
+if not (os.path.isdir(f'{LOCAL_DIR}/data') and os.listdir(f'{LOCAL_DIR}/data')):   # 2) 本地未解压→解压
+    os.makedirs(LOCAL_DIR, exist_ok=True)
+    subprocess.run(f'unzip -q -o "{DRIVE_ZIP}" -d {LOCAL_DIR}', shell=True, check=True)
+!ls {LOCAL_DIR}
 
 # Cell 4: 用本地写好的代码
 from src import config            # config.ENV == 'colab', config.DATA_DIR 已就绪

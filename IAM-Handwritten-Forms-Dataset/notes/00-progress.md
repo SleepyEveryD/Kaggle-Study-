@@ -6,6 +6,7 @@
 阶段 2。Colab 环境跑通：数据已下载（4.31GB）、import src OK、config 识别 colab。
 **待办**：探明里层数据结构（`/content/data/iam/data/` 套娃，真实 forms/lines/words 在里面）→ 据此写 `src/data.py`。
 **已知坑**：Colab clone 残留旧文件夹会拉错分支 → 已在 Cell 1 加 `rm -rf` + 分支打印修复。
+**数据持久化**：已改成 Google Drive 版——zip 缓存到 `MyDrive/iam-handwritten-forms/`，每次会话从 Drive 解压到本地 `/content/data/iam`（只下载一次；IAM 海量小图不直接存 Drive）。
 
 ## 工作流 & 环境（已定）
 - 本地写 `src/*.py`（git，**commit/push 由用户手动**）→ push → Colab `git clone` 后 import。
