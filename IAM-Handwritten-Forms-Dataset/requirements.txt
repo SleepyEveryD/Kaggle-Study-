@@ -1,0 +1,10 @@
+# 本地开发/类型检查用；云端(Kaggle/Colab)已预装大部分，按需补装。
+torch
+torchvision
+numpy
+pandas
+pillow
+opencv-python
+matplotlib
+editdistance        # 算 CER / WER
+tqdm

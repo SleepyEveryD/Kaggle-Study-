@@ -1,0 +1,25 @@
+# 数据（不入库，云端挂载/下载）
+data/
+*.zip
+*.tar
+*.tar.gz
+
+# 模型权重 / 输出
+checkpoints/
+*.pt
+*.pth
+*.ckpt
+outputs/
+runs/
+
+# Python
+__pycache__/
+*.py[cod]
+.ipynb_checkpoints/
+.venv/
+venv/
+env/
+
+# 系统
+.DS_Store
+Thumbs.db
