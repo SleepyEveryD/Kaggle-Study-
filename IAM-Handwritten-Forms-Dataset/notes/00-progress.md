@@ -3,10 +3,10 @@
 > 这是项目的**活页状态**，每次学习推进后更新。背景见 [README](../README.md)。
 
 ## 当前阶段
-阶段 2。Colab 环境跑通：数据已下载（4.31GB）、import src OK、config 识别 colab。
-**待办**：探明里层数据结构 → 据此写 `src/data.py`。
-**⚠️ 重要发现**：`/content/data/iam/data/` 下是 659 个编号文件夹（000~671，疑似按 writer 分，IAM 有 657 writer），**第一次探查没找到任何 .txt 标注文件**！没标签就无法监督训练。已升级探查 cell 排查标签是否为 csv/json/xml 或藏更深——结果待确认。
-**已知坑**：Colab clone 残留旧文件夹会拉错分支 → 已在 Cell 1 加 `rm -rf` + 分支打印修复。
+阶段 2（**方向修正**）。**原 forms 数据集弃用**——探查确认：1539 张整页 form 图、**无文字标签**、659 文件夹按 writer 分，实为 **Writer Identification** 用途，不是 HTR。
+**新主线**：复现 **Keras 官方 HTR 示例（CRNN+CTC，IAM Words 带标签）**，数据换成 word 级带 `words.txt` 的 Kaggle 镜像。详见 [resources](resources.md)。
+**待办**：换数据集 → 复现 Keras CRNN+CTC（正好对应 concept-01/02/03）。
+**已知坑**：Colab clone 残留旧文件夹会拉错分支 → Cell 1 已加 `rm -rf`+分支打印；notebook 双向 commit 易冲突，改 notebook 后须在 Colab 重新从 GitHub 打开。
 **数据持久化**：已改成 Google Drive 版——zip 缓存到 `MyDrive/iam-handwritten-forms/`，每次会话从 Drive 解压到本地 `/content/data/iam`（只下载一次；IAM 海量小图不直接存 Drive）。
 
 ## 工作流 & 环境（已定）
@@ -31,3 +31,4 @@
 - [01-htr-overview](01-htr-overview.md) — HTR 全局技术地图（对齐问题/CRNN+CTC/粒度/CER-WER/7步pipeline）
 - [02-iam-dataset-structure](02-iam-dataset-structure.md) — IAM 数据结构（四粒度/命名钥匙/words.txt/ok-err过滤）
 - [03-ctc-loss](03-ctc-loss.md) — CTC loss（blank/collapse/loss求和/解码/PyTorch要点）
+- [solution-keras-crnn-ctc](solution-keras-crnn-ctc.md) — 复现 Keras CRNN+CTC（块1数据加载已拆 ✅，块2-5待续）
