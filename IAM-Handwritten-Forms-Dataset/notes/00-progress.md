@@ -31,4 +31,5 @@
 - [01-htr-overview](01-htr-overview.md) — HTR 全局技术地图（对齐问题/CRNN+CTC/粒度/CER-WER/7步pipeline）
 - [02-iam-dataset-structure](02-iam-dataset-structure.md) — IAM 数据结构（四粒度/命名钥匙/words.txt/ok-err过滤）
 - [03-ctc-loss](03-ctc-loss.md) — CTC loss（blank/collapse/loss求和/解码/PyTorch要点）
+- [04-train-val-test](04-train-val-test.md) — train/val/test 三集合（为什么 val 和 test 都要）
 - [solution-keras-crnn-ctc](solution-keras-crnn-ctc.md) — 复现 Keras CRNN+CTC（块1数据加载已拆 ✅，块2-5待续）
